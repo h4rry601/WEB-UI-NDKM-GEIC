@@ -1,0 +1,390 @@
+.sidebar {
+  --sidebar-width: 280px;
+  --sidebar-collapsed-width: 72px;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: #E0F2FE;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(43, 153, 212, 0.1);
+  z-index: 100;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar.collapsed {
+  width: var(--sidebar-collapsed-width);
+}
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(43, 153, 212, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
+  padding: 24px 0;
+}
+
+.sidebar-header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.sidebar-logo {
+  height: 100px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #2B99D4;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.sidebar.collapsed .sidebar-title {
+  display: none;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(43, 153, 212, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(43, 153, 212, 0.5);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: left;
+  width: 100%;
+  border-radius: 0;
+}
+
+.nav-item:hover {
+  background-color: rgba(43, 153, 212, 0.1);
+  color: #2B99D4;
+}
+
+.nav-item.active {
+  background-color: rgba(43, 153, 212, 0.15);
+  color: #2B99D4;
+  font-weight: 600;
+  border-left: 3px solid #2B99D4;
+}
+
+.nav-item span {
+  flex: 1;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.sidebar.collapsed .nav-item span {
+  display: none;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(43, 153, 212, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar.collapsed .sidebar-footer {
+  padding: 20px 12px;
+  align-items: center;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+}
+
+.sidebar.collapsed .user-profile {
+  display: none;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar.collapsed .user-info {
+  display: none;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 2px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  text-align: left;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.logout-button:hover {
+  background-color: rgba(43, 153, 212, 0.1);
+  color: #2B99D4;
+}
+
+.logout-button span {
+  flex: 1;
+}
+
+.sidebar.collapsed .logout-button span {
+  display: none;
+}
+
+/* ==================== RESPONSIVE BREAKPOINTS ==================== */
+
+/* Tablet and Mobile - Add hamburger menu overlay */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  /* Overlay backdrop */
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+  }
+
+  .sidebar-backdrop.active {
+    display: block;
+  }
+
+  /* Sidebar always expanded on mobile when open */
+  .sidebar {
+    width: var(--sidebar-width);
+  }
+
+  .sidebar.collapsed {
+    width: var(--sidebar-width);
+  }
+
+  .sidebar-header {
+    padding: 20px;
+  }
+
+  .sidebar-logo {
+    height: 80px;
+  }
+
+  .nav-item {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+
+  .user-profile {
+    padding: 12px;
+  }
+
+  .user-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .user-name {
+    font-size: 15px;
+  }
+
+  .logout-button {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+/* Mobile Landscape and below */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+    box-shadow: 4px 0 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar-header {
+    padding: 18px 16px;
+  }
+
+  .sidebar-logo {
+    height: 70px;
+  }
+
+  .sidebar-title {
+    font-size: 16px;
+  }
+
+  .sidebar-nav {
+    padding: 12px 0;
+  }
+
+  .nav-item {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .sidebar-footer {
+    padding: 16px;
+  }
+
+  .user-profile {
+    padding: 10px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-name {
+    font-size: 14px;
+  }
+
+  .user-email {
+    font-size: 11px;
+  }
+
+  .logout-button {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* Mobile Portrait */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 260px;
+  }
+
+  .sidebar-header {
+    padding: 16px 14px;
+  }
+
+  .sidebar-logo {
+    height: 60px;
+  }
+
+  .sidebar-title {
+    font-size: 15px;
+  }
+
+  .nav-item {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+
+  .sidebar-footer {
+    padding: 14px;
+  }
+
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .user-email {
+    font-size: 10px;
+  }
+
+  .logout-button {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+}
