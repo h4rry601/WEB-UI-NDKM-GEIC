@@ -1320,5 +1320,4 @@ Frontend hiện tại đã cài đặt các dependencies sau:
 ---
 
 **Lưu ý:** README này sẽ được cập nhật khi có thay đổi về API hoặc requirements. Vui lòng kiểm tra phiên bản mới nhất trước khi bắt đầu tích hợp.
-#   W E B - N H A N - D I E N - K H U O N - M A T  
- 
+#
