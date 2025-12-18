@@ -17,7 +17,7 @@ function Login() {
     const result = login(username.trim(), password, remember)
     if (result.success) {
       setError(null)
-      navigate('/dashboard', { state: { fromLogin: true } })
+      navigate('/home', { state: { fromLogin: true } })
     } else if (result.message) {
       setError(result.message)
     }

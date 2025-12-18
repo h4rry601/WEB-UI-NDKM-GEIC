@@ -3,15 +3,15 @@ import { useLocation } from 'react-router-dom'
 import EmployeeForm from '../components/EmployeeForm'
 import EmployeeTables from '../components/EmployeeTables'
 import Sidebar from '../components/Sidebar'
-import ConfirmDialog from '../components/ConfirmDialog'
+import ConfirmDialog from '../components/common/ConfirmDialog'
 import './Dashboard.css'
 
 export interface Employee {
   id: string
-  imageFront: string  
-  imageLeft: string   
-  imageRight: string 
-  imageUp: string     
+  imageFront: string
+  imageLeft: string
+  imageRight: string
+  imageUp: string
   imageDown: string
   fullName: string
   gender: string
@@ -24,6 +24,10 @@ export interface Employee {
 
 function Dashboard() {
   const location = useLocation()
+  const generateId = () => {
+    const uuid = (globalThis as any).crypto?.randomUUID?.()
+    return uuid || `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+  }
   const [employees, setEmployees] = useState<Employee[]>([])
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null)
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
@@ -47,7 +51,7 @@ function Dashboard() {
   const handleAdd = (employee: Omit<Employee, 'id'>) => {
     const newEmployee: Employee = {
       ...employee,
-      id: Date.now().toString()
+      id: generateId()
     }
     setEmployees(prev => [...prev, newEmployee])
     setInfoDialogMessage('Đã lưu thông tin nhân viên vào hệ thống.')
@@ -59,7 +63,7 @@ function Dashboard() {
   }
 
   const handleUpdate = (updatedEmployee: Employee) => {
-    setEmployees(employees.map(emp => 
+    setEmployees(employees.map(emp =>
       emp.id === updatedEmployee.id ? updatedEmployee : emp
     ))
     setEditingEmployee(null)
@@ -108,7 +112,7 @@ function Dashboard() {
     } else {
       const newEmployee: Employee = {
         ...employee,
-        id: Date.now().toString()
+        id: generateId()
       }
       setEmployees(prev => [...prev, newEmployee])
       setInfoDialogMessage('Đã lưu thông tin nhân viên vào hệ thống.')
@@ -172,7 +176,7 @@ function Dashboard() {
                 />
               </div>
             </div>
-            
+
             <div className="dashboard-right">
               <EmployeeTables
                 employees={employees}
@@ -193,8 +197,8 @@ function Dashboard() {
           pendingDeleteIds.length > 0
             ? `Bạn có chắc chắn muốn xóa ${pendingDeleteIds.length} nhân viên đã chọn?`
             : pendingDeleteEmployee
-            ? `Bạn có chắc chắn muốn xóa ${pendingDeleteEmployee.fullName}?`
-            : 'Bạn có chắc chắn muốn xóa nhân viên này?'
+              ? `Bạn có chắc chắn muốn xóa ${pendingDeleteEmployee.fullName}?`
+              : 'Bạn có chắc chắn muốn xóa nhân viên này?'
         }
         confirmLabel="Xóa"
         cancelLabel="Hủy"
@@ -229,7 +233,7 @@ function Dashboard() {
                 onSave={handleSave}
                 selectedEmployee={null}
                 editingEmployee={null}
-                onSelectEmployee={() => {}}
+                onSelectEmployee={() => { }}
                 onSubmitSuccess={closeGuestModal}
                 onCancelEditing={closeGuestModal}
                 formTitle="Thông tin nhân viên mới"
@@ -243,4 +247,3 @@ function Dashboard() {
 }
 
 export default Dashboard
-

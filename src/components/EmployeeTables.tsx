@@ -28,8 +28,11 @@ interface EmployeeTablesProps {
 
 const EmployeeTables: React.FC<EmployeeTablesProps> = ({
     employees,
+    selectedEmployee,
+    onRowClick,
     onEdit,
-    onDelete
+    onDelete,
+    onDeleteMultiple
 }) => {
     const [selectedIds, setSelectedIds] = useState<string[]>([])
 
@@ -97,6 +100,15 @@ const EmployeeTables: React.FC<EmployeeTablesProps> = ({
                             </button>
                         </>
                     )}
+                    {selectedIds.length > 1 && (
+                        <button
+                            className="btn-header-action btn-delete"
+                            onClick={() => onDeleteMultiple(selectedIds)}
+                            title="Xóa nhiều nhân viên đã chọn"
+                        >
+                            🗑 Xóa ({selectedIds.length})
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -133,10 +145,12 @@ const EmployeeTables: React.FC<EmployeeTablesProps> = ({
                                 const rowKey = employee.id
                                 const isChecked = selectedIds.includes(rowKey)
 
+                                const isRowSelected = selectedEmployee?.id === employee.id
                                 return (
                                     <tr
                                         key={rowKey}
-                                        className="employee-row"
+                                        className={`employee-row ${isRowSelected ? 'selected' : ''}`}
+                                        onClick={() => onRowClick(employee)}
                                     >
                                         <td className="td-checkbox" onClick={(e) => e.stopPropagation()}>
                                             <input

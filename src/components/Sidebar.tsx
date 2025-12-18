@@ -1,11 +1,8 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
-import PersonnelIcon from './PersonnelIcon'
-import SettingsIcon from './SettingsIcon'
-import LogoutIcon from './LogoutIcon'
-import UserIcon from './UserIcon'
-import ConfirmDialog from './ConfirmDialog'
+import { PersonnelIcon, SettingsIcon, LogoutIcon, UserIcon, HomeIcon, ReportsIcon } from './icons'
+import ConfirmDialog from './common/ConfirmDialog'
 import gsafeLogo from '../assets/images/logo Gsafe.png'
 import './Sidebar.css'
 
@@ -36,13 +33,17 @@ function Sidebar({ activePage = 'dashboard', isOpen = true, onHoverChange }: Sid
   }
 
   const menuItems = [
+    { id: 'home', label: 'Trang chủ', icon: HomeIcon, path: '/home' },
     { id: 'personnel', label: 'Nhân sự', icon: PersonnelIcon, path: '/dashboard' },
+    { id: 'reports', label: 'Báo cáo', icon: ReportsIcon, path: '/reports' },
     { id: 'settings', label: 'Cài đặt', icon: SettingsIcon, path: '/settings' }
   ]
 
   const currentPath = location.pathname
   const isActive = (itemId: string) => {
+    if (itemId === 'home' && currentPath === '/home') return true
     if (itemId === 'personnel' && currentPath === '/dashboard') return true
+    if (itemId === 'reports' && currentPath === '/reports') return true
     if (itemId === 'settings' && currentPath === '/settings') return true
     return activePage === itemId
   }
