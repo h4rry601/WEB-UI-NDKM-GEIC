@@ -12,15 +12,25 @@ File ZIP cần chứa:
 employees_batch.zip
 
 ├── employees.xlsx                    (File Excel chứa thông tin)
+
 ├── MNS001/                           (Thư mục nhân viên 1)
+
 │   ├── front1.jpg                    (Nhìn thẳng có biểu cảm)
+
 │   ├── front2.jpg                    (Nhìn thẳng không biểu cảm)
+
 │   ├── left1.jpg                     (Nhìn trái 20° có biểu cảm)
+
 │   ├── left2.jpg                     (Nhìn trái 20° không biểu cảm)
+
 │   ├── right1.jpg                    (Nhìn phải 20° có biểu cảm)
+
 │   ├── right2.jpg                    (Nhìn phải 20° không biểu cảm)
+
 │   ├── up.jpg                        (Nhìn lên 20°)
+
 │   └── down.jpg                      (Nhìn xuống 20°)
+
 └── MNS002/                           (Thư mục nhân viên 2)
     ├── front1.jpg
     ├── front2.jpg
