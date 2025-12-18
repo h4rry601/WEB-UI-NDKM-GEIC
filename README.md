@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Hệ Thống Giám Sát Nhận Diện Khuôn Mặt (NDKM)
 
 Ứng dụng web quản lý nhân viên và nhận diện khuôn mặt được xây dựng bằng
