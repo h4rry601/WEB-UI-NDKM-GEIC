@@ -10,6 +10,7 @@ File ZIP cần chứa:
 ### Ví dụ cấu trúc
 
 employees_batch.zip
+
 ├── employees.xlsx                    (File Excel chứa thông tin)
 ├── MNS001/                           (Thư mục nhân viên 1)
 │   ├── front1.jpg                    (Nhìn thẳng có biểu cảm)
