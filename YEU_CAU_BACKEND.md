@@ -1,7 +1,6 @@
 # Tài liệu Thống nhất API (Frontend -> Backend)
 
-Để đảm bảo Frontend hoạt động chính xác khi tích hợp, Frontend Team đề xuất các cấu trúc dữ liệu và API Endpoint dưới đây. Vui lòng xác nhận hoặc cung cấp thông tin điều chỉnh nếu Backend đã triển khai khác.
-
+Để đảm bảo Frontend hoạt động chính xác khi tích hợp, cần có các cấu trúc dữ liệu và API Endpoint dưới đây:
 ## 1. Báo cáo & Thống kê (Chưa có trong tài liệu cũ)
 
 ### 1.1. Lấy danh sách điểm danh
@@ -75,6 +74,3 @@ Hiện tại Frontend đang xử lý file Excel và ảnh ở phía client, sau 
 - **Date Format:** YYYY-MM-DD
 - **Time Format:** HH:mm:ss
 - **Image URL:** Backend trả về Full URL (có domain) hay Relative path? (Frontend đang mong đợi Full URL).
-
----
-*Vui lòng phản hồi sớm để Frontend cập nhật logic nếu có thay đổi.*
