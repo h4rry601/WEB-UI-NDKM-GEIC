@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Employee {
+  id         String       @id
+  name       String
+  image      String?
+  createdAt  DateTime     @default(now())
+  attendance Attendance[]
+
+  @@map("employees")
+}
+
+model Attendance {
+  id         Int       @id @default(autoincrement())
+  employeeId String
+  employee   Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  timeIn     String?
+  timeOut    String?
+  date       String
+  status     String
+
+  @@map("attendance")
+}
+
+model StrangerWarning {
+  id             String   @id @default(uuid())
+  time           String
+  imageUrl       String
+  cameraLocation String
+  createdAt      DateTime @default(now())
+
+  @@map("stranger_warnings")
+}

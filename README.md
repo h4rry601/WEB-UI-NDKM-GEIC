@@ -11,6 +11,14 @@
 - [Data Models (JSON Structure)](#data-models-json-structure)
 - [Authentication Flow](#authentication-flow)
 
+- Cài đặt và Chạy (#cài-đặt-và-chạy)
+- Cấu trúc Project (#cấu-trúc-project)
+- Tích hợp Backend API (#tích-hợp-backend-api)
+- API Endpoints Specification (#api-endpoints-specification)
+- Data Models (JSON Structure) (#data-models-json-structure)
+- Authentication Flow (#authentication-flow)
+
+
 ## 🚀 Cài đặt và Chạy
 
 Yêu cầu: Node.js >= 16, npm >= 8 hoặc yarn >= 1.22.
@@ -24,7 +32,6 @@ npm run dev
 
 ## 📁 Cấu trúc Project
 
-```
 web-NDKM/
 ├── src/
 │   ├── components/
@@ -48,7 +55,6 @@ web-NDKM/
 │   │   └── AuthContext.tsx
 │   └── App.tsx
 └── index.html
-```
 
 ## 🔌 Tích hợp Backend API
 
@@ -132,4 +138,3 @@ Report: Attendance
 - Login nhận token JWT → lưu `localStorage`.
 - Mọi request (trừ login) gửi header `Authorization: Bearer <token>`.
 - Khi `401` → xoá token và chuyển hướng về `/login`.
-
