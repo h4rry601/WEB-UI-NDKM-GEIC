@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import * as XLSX from 'xlsx'
 import Sidebar from '../components/Sidebar'
 import { reportService, StrangerReport, AttendanceReport } from '../services/reportService'
 import './Reports.css'
@@ -9,7 +10,6 @@ function Reports() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<ReportType>('attendance')
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0])
-  
   const [attendanceData, setAttendanceData] = useState<AttendanceReport[]>([])
   const [strangerData, setStrangerData] = useState<StrangerReport[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -18,13 +18,107 @@ function Reports() {
     setIsSidebarOpen(open)
   }
 
+  const getStatusLabel = (status: AttendanceReport['status']) => {
+    if (status === 'present') return 'Đúng giờ'
+    if (status === 'late') return 'Đi muộn'
+    return 'Vắng mặt'
+  }
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+
+  const escapeCsv = (value: string) => {
+    const stringValue = value ?? ''
+    const needsQuotes = /[",\n\r]/.test(stringValue)
+    const escaped = stringValue.replace(/"/g, '""')
+    return needsQuotes ? `"${escaped}"` : escaped
+  }
+
+  const handleExportCsv = () => {
+    const dateLabel = selectedDate || 'all'
+    if (activeTab === 'attendance') {
+      if (!attendanceData.length) return
+      const headers = ['Mã NV', 'Họ tên', 'Ngày', 'Thời gian vào', 'Thời gian ra', 'Trạng thái']
+      const rows = attendanceData.map((item) => [
+        item.employeeId,
+        item.employeeName,
+        item.date,
+        item.timeIn || '',
+        item.timeOut || '',
+        getStatusLabel(item.status)
+      ])
+      const csvContent = [headers, ...rows]
+        .map((row) => row.map((cell) => escapeCsv(String(cell))).join(','))
+        .join('\r\n')
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      downloadBlob(blob, `attendance_${dateLabel}.csv`)
+    } else {
+      if (!strangerData.length) return
+      const headers = ['Thời gian', 'Vị trí Camera', 'Đường dẫn ảnh']
+      const rows = strangerData.map((item) => [
+        item.time,
+        item.cameraLocation || '',
+        item.imageUrl
+      ])
+      const csvContent = [headers, ...rows]
+        .map((row) => row.map((cell) => escapeCsv(String(cell))).join(','))
+        .join('\r\n')
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      downloadBlob(blob, `strangers_${dateLabel}.csv`)
+    }
+  }
+
+  const handleExportExcel = () => {
+    const dateLabel = selectedDate || 'all'
+    if (activeTab === 'attendance') {
+      if (!attendanceData.length) return
+      const sheetData = attendanceData.map((item) => ({
+        'Mã NV': item.employeeId,
+        'Họ tên': item.employeeName,
+        'Ngày': item.date,
+        'Thời gian vào': item.timeIn || '',
+        'Thời gian ra': item.timeOut || '',
+        'Trạng thái': getStatusLabel(item.status)
+      }))
+      const worksheet = XLSX.utils.json_to_sheet(sheetData)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Attendance')
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+      const blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      })
+      downloadBlob(blob, `attendance_${dateLabel}.xlsx`)
+    } else {
+      if (!strangerData.length) return
+      const sheetData = strangerData.map((item) => ({
+        'Thời gian': item.time,
+        'Vị trí Camera': item.cameraLocation || '',
+        'Đường dẫn ảnh': item.imageUrl
+      }))
+      const worksheet = XLSX.utils.json_to_sheet(sheetData)
+      const workbook = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Strangers')
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+      const blob = new Blob([excelBuffer], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      })
+      downloadBlob(blob, `strangers_${dateLabel}.xlsx`)
+    }
+  }
+
   const fetchData = async () => {
     setIsLoading(true)
     try {
       if (activeTab === 'attendance') {
         const response = await reportService.getAttendance(selectedDate)
-        // Check if response is array or wrapped in data property
-        // Assuming API returns { success: true, data: [...] } or just [...]
         const data = Array.isArray(response) ? response : (response.data || [])
         setAttendanceData(data)
       } else {
@@ -34,11 +128,10 @@ function Reports() {
       }
     } catch (error) {
       console.error('Failed to fetch report data:', error)
-      // For demo purposes, keep data empty or set mock data if needed
       if (activeTab === 'attendance') {
-          setAttendanceData([])
+        setAttendanceData([])
       } else {
-          setStrangerData([])
+        setStrangerData([])
       }
     } finally {
       setIsLoading(false)
@@ -151,15 +244,25 @@ function Reports() {
             </button>
           </div>
 
-          <div className="date-picker-container">
-            <label htmlFor="report-date">Ngày xem:</label>
-            <input 
-              type="date" 
-              id="report-date"
-              className="date-input"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
+          <div className="reports-right">
+            <div className="date-picker-container">
+              <label htmlFor="report-date">Ngày xem:</label>
+              <input 
+                type="date" 
+                id="report-date"
+                className="date-input"
+                value={selectedDate}
+                onChange={(e) => setSelectedDate(e.target.value)}
+              />
+            </div>
+            <div className="export-buttons">
+              <button className="export-btn" onClick={handleExportCsv}>
+                Xuất CSV
+              </button>
+              <button className="export-btn export-primary" onClick={handleExportExcel}>
+                Xuất Excel
+              </button>
+            </div>
           </div>
         </div>
 
