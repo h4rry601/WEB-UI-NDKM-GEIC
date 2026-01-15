@@ -15,7 +15,7 @@ interface SidebarProps {
 function Sidebar({ activePage = 'dashboard', isOpen = true, onHoverChange }: SidebarProps) {
   const navigate = useNavigate()
   const location = useLocation()
-  const { logout } = useAuth()
+  const { logout, username } = useAuth()
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false)
 
   const handleLogoutClick = () => {
@@ -31,6 +31,8 @@ function Sidebar({ activePage = 'dashboard', isOpen = true, onHoverChange }: Sid
   const handleCancelLogout = () => {
     setShowLogoutConfirm(false)
   }
+
+  const displayName = username || 'Admin'
 
   const menuItems = [
     { id: 'home', label: 'Trang chủ', icon: HomeIcon, path: '/home' },
@@ -89,8 +91,10 @@ function Sidebar({ activePage = 'dashboard', isOpen = true, onHoverChange }: Sid
               <UserIcon size={24} color="#2B99D4" />
             </div>
             <div className="user-info">
-              <div className="user-name">Admin</div>
-              <div className="user-email">admin@company.com</div>
+              <div className="user-name">{displayName}</div>
+              {username && username.includes('@') && (
+                <div className="user-email">{username}</div>
+              )}
             </div>
           </div>
         )}

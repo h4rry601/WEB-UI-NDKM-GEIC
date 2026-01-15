@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 
 interface AuthContextType {
   isAuthenticated: boolean
+  username: string | null
   login: (
     username: string,
     password: string,
@@ -32,6 +33,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return stored ? Number(stored) : null
   })
 
+  const [username, setUsername] = useState<string | null>(() => {
+    return localStorage.getItem('username') || null
+  })
+
   const login = (
     username: string,
     password: string,
@@ -50,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (username === DEFAULT_USERNAME && password === DEFAULT_PASSWORD) {
       setIsAuthenticated(true)
+      setUsername(username)
       setFailedAttempts(0)
       setLockUntil(null)
       localStorage.setItem('isAuthenticated', 'true')
@@ -90,13 +96,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setIsAuthenticated(false)
+    setUsername(null)
     localStorage.removeItem('isAuthenticated')
     localStorage.removeItem('username')
     localStorage.removeItem('rememberLogin')
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, username, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
