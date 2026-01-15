@@ -1,13 +1,8 @@
-import 'dotenv/config';
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import type { Attendance, Employee, StrangerWarning } from '@prisma/client';
 
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? 'file:./dev.db',
-});
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient();
 
 export const getAttendance = async (req: Request, res: Response) => {
   try {

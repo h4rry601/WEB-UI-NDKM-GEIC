@@ -1,15 +1,10 @@
-import 'dotenv/config';
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
 import type { Employee as EmployeeModel } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 
-const adapter = new PrismaBetterSqlite3({
-  url: process.env.DATABASE_URL ?? 'file:./dev.db',
-});
-const prisma = new PrismaClient({ adapter });
+const prisma = new PrismaClient();
 
 type BatchEmployee = {
   employeeId: string;
